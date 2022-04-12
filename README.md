@@ -1,2 +1,2 @@
-# mon-go-backend
-backend using mongodb and golang 
+# Mongo Golang API
+Simple API for bootstrapping a golang API using mongoDB as the database
