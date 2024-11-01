@@ -1,0 +1,100 @@
+openapi: 3.0.0
+info:
+  description: An API for managing batch processing jobs.
+  title: Batch Processing Service API
+  version: 1.0.0
+servers:
+- url: https://api.example.com/batch-processing
+paths:
+  /jobs:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_jobs_post_request'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_jobs_post_201_response'
+          description: The job has been submitted successfully.
+      summary: Submit a new batch job.
+  /jobs/{id}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_jobs__id__get_200_response'
+          description: The job status.
+        "404":
+          description: Job not found.
+      summary: Retrieve the status of a specific job.
+  /jobs/{id}/download:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: The result file has been downloaded.
+        "404":
+          description: Job not found.
+      summary: Download the result of a specific job.
+components:
+  schemas:
+    _jobs__id__get_200_response:
+      example:
+        result: result
+        status: status
+      properties:
+        status:
+          description: Current status of the job.
+          type: string
+        result:
+          description: The result of the job.
+          type: string
+      type: object
+    _jobs_post_request:
+      properties:
+        taskType:
+          description: The type of task to perform.
+          type: string
+        inputData:
+          description: The input data for the job.
+          type: string
+      type: object
+    _jobs_post_201_response:
+      example:
+        jobId: jobId
+        status: status
+      properties:
+        jobId:
+          description: Unique identifier of the job.
+          type: string
+        status:
+          description: Current status of the job.
+          type: string
+      type: object

@@ -1,0 +1,86 @@
+openapi: 3.0.0
+info:
+  title: Batch Processing Service API
+  version: 1.0.0
+  description: An API for managing batch processing jobs.
+servers:
+  - url: https://api.example.com/batch-processing
+
+paths:
+  /jobs:
+    post:
+      summary: Submit a new batch job.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taskType:
+                  type: string
+                  description: The type of task to perform.
+                inputData:
+                  type: string
+                  description: The input data for the job.
+      responses:
+        '201':
+          description: The job has been submitted successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+                    description: Unique identifier of the job.
+                  status:
+                    type: string
+                    description: Current status of the job.
+
+  /jobs/{id}:
+    get:
+      summary: Retrieve the status of a specific job.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The job status.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Current status of the job.
+                  result:
+                    type: string
+                    description: The result of the job.
+        '404':
+          description: Job not found.
+
+  /jobs/{id}/download:
+    get:
+      summary: Download the result of a specific job.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The result file has been downloaded.
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: Job not found.
+
